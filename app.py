@@ -3,10 +3,6 @@ import mysql.connector
 
 app = Flask(__name__)
 
-# Render-compatible host and port usage
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
-
 # MySQL connection
 def get_db_connection():
     return mysql.connector.connect(
@@ -16,7 +12,7 @@ def get_db_connection():
         database='bloodconnect'
     )
 
-# Home page
+# Home route
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -30,7 +26,6 @@ def register_donor():
         blood_group = request.form['blood_group']
         contact = request.form['contact']
         city = request.form['city']
-
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("INSERT INTO donors (name, age, blood_group, contact, city) VALUES (%s, %s, %s, %s, %s)",
@@ -50,7 +45,6 @@ def request_blood():
         contact = request.form['contact']
         city = request.form['city']
         reason = request.form['reason']
-
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("INSERT INTO requests (patient_name, age, blood_group, contact, city, reason) VALUES (%s, %s, %s, %s, %s, %s)",
@@ -60,7 +54,7 @@ def request_blood():
         return render_template('thank_you.html', message="Blood request submitted successfully!")
     return render_template('request_blood.html')
 
-# View all donors
+# View donors
 @app.route('/view_donors')
 def view_donors():
     conn = get_db_connection()
@@ -70,7 +64,7 @@ def view_donors():
     conn.close()
     return render_template('view_donors.html', donors=donors)
 
-# View all blood requests
+# View requests
 @app.route('/view_requests')
 def view_requests():
     conn = get_db_connection()
@@ -79,3 +73,7 @@ def view_requests():
     requests_data = cursor.fetchall()
     conn.close()
     return render_template('view_requests.html', requests=requests_data)
+
+# Required for Render deployment (do not remove)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
