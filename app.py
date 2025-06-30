@@ -3,86 +3,79 @@ import mysql.connector
 
 app = Flask(__name__)
 
-# Database connection
+# Render-compatible host and port usage
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
+
+# MySQL connection
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",         # use your MySQL username
-        password="",         # use your MySQL password
-        database="bloodconnect"
+        host='localhost',
+        user='root',
+        password='',
+        database='bloodconnect'
     )
 
-# Home Page
+# Home page
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
 
-# Register Donor Page
+# Register donor
 @app.route('/register_donor', methods=['GET', 'POST'])
 def register_donor():
     if request.method == 'POST':
         name = request.form['name']
+        age = request.form['age']
         blood_group = request.form['blood_group']
-        phone = request.form['phone']
-        email = request.form['email']
-        location = request.form['location']
+        contact = request.form['contact']
+        city = request.form['city']
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO donors (name, blood_group, phone, email, location) VALUES (%s, %s, %s, %s, %s)",
-                       (name, blood_group, phone, email, location))
+        cursor.execute("INSERT INTO donors (name, age, blood_group, contact, city) VALUES (%s, %s, %s, %s, %s)",
+                       (name, age, blood_group, contact, city))
         conn.commit()
-        cursor.close()
         conn.close()
-        return redirect('/view_donors')
+        return render_template('thank_you.html', message="Donor registered successfully!")
     return render_template('register_donor.html')
 
-# View Donors
-@app.route('/view_donors')
-def view_donors():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM donors")
-    donors = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return render_template('view_donors.html', donors=donors)
-
-# Request Blood Page
+# Request blood
 @app.route('/request_blood', methods=['GET', 'POST'])
 def request_blood():
     if request.method == 'POST':
-        name = request.form['name']
+        patient_name = request.form['patient_name']
+        age = request.form['age']
         blood_group = request.form['blood_group']
-        phone = request.form['phone']
-        email = request.form['email']
-        location = request.form['location']
-        reason = request.form.get('reason')
+        contact = request.form['contact']
+        city = request.form['city']
+        reason = request.form['reason']
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO requests (name, blood_group, phone, email, location, reason) VALUES (%s, %s, %s, %s, %s, %s)",
-                       (name, blood_group, phone, email, location, reason))
+        cursor.execute("INSERT INTO requests (patient_name, age, blood_group, contact, city, reason) VALUES (%s, %s, %s, %s, %s, %s)",
+                       (patient_name, age, blood_group, contact, city, reason))
         conn.commit()
-        cursor.close()
         conn.close()
-        return redirect('/view_requests')
+        return render_template('thank_you.html', message="Blood request submitted successfully!")
     return render_template('request_blood.html')
 
-# View Requests
+# View all donors
+@app.route('/view_donors')
+def view_donors():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM donors")
+    donors = cursor.fetchall()
+    conn.close()
+    return render_template('view_donors.html', donors=donors)
+
+# View all blood requests
 @app.route('/view_requests')
 def view_requests():
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM requests")
     requests_data = cursor.fetchall()
-    cursor.close()
     conn.close()
     return render_template('view_requests.html', requests=requests_data)
-
-# Run the app
-if __name__ == '__main__':
-  import os
-
-port = int(os.environ.get("PORT", 5000))
-app.run(host='0.0.0.0', port=port)
