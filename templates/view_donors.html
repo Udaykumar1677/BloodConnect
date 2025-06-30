@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Available Donors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9a3b2;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 85%;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 10px;
+            margin-top: 50px;
+            padding: 30px;
+            box-shadow: 0px 0px 10px #888;
+        }
+        h2 {
+            text-align: center;
+            color: #d63384;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        th, td {
+            padding: 14px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #ff4f81;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #ffe3ec;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Registered Donors</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Blood Group</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Location</th>
+            </tr>
+            {% for donor in donors %}
+            <tr>
+                <td>{{ donor[0] }}</td>  <!-- name -->
+                <td>{{ donor[1] }}</td>  <!-- blood_group -->
+                <td>{{ donor[2] }}</td>  <!-- contact -->
+                <td>{{ donor[3] }}</td>  <!-- email -->
+                <td>{{ donor[4] }}</td>  <!-- location -->
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
