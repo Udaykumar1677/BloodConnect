@@ -57,21 +57,21 @@
         <h2>Blood Requests</h2>
         <table>
             <tr>
-                <th>Name</th>
+                <th>Patient Name</th>
+                <th>Age</th>
                 <th>Blood Group</th>
                 <th>Contact</th>
-                <th>Email</th>
-                <th>Location</th>
+                <th>City</th>
                 <th>Reason</th>
             </tr>
             {% for req in requests %}
             <tr>
-                <td>{{ req[1] }}</td>
-                <td>{{ req[2] }}</td>
-                <td>{{ req[3] }}</td>
-                <td>{{ req[4] }}</td>
-                <td>{{ req[5] }}</td>
-                <td>{{ req[6] }}</td>
+                <td>{{ req['patient_name'] }}</td>
+                <td>{{ req['age'] }}</td>
+                <td>{{ req['blood_group'] }}</td>
+                <td>{{ req['contact'] }}</td>
+                <td>{{ req['city'] }}</td>
+                <td>{{ req['reason'] }}</td>
             </tr>
             {% endfor %}
         </table>
