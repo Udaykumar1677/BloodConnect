@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Blood Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ff99aa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            margin: 50px auto;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: crimson;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            color: #000;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: crimson;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #fdd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Blood Requests</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Blood Group</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Location</th>
+                <th>Reason</th>
+            </tr>
+            {% for req in requests %}
+            <tr>
+                <td>{{ req[1] }}</td>
+                <td>{{ req[2] }}</td>
+                <td>{{ req[3] }}</td>
+                <td>{{ req[4] }}</td>
+                <td>{{ req[5] }}</td>
+                <td>{{ req[6] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
